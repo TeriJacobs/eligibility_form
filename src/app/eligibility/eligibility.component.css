@@ -222,15 +222,11 @@ h2 {
     gap: 0.5rem;
     margin-bottom: 0.75rem;
     font-size: 1rem;
-    /* match your red text */
 }
 
 
 
 /* error mat icons list item change */
-
-
-
 .not-eligible mat-icon {
     height: 70px !important;
     width: 70px !important;
@@ -269,10 +265,4 @@ h2 {
     height: 100%;
     gap: 1rem;
     text-align: center;
-}
-
-::ng-deep .mat-progress-spinner circle,
-::ng-deep .mat-spinner circle {
-    stroke: #18711b;
-    /* Material green or choose your own shade */
 }

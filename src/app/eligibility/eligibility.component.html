@@ -1,4 +1,3 @@
-<!-- Progress bar always visible -->
 <div class="progress-container">
     <div class="progress-bar" [style.width.%]="calculateProgress()"></div>
 </div>
@@ -142,7 +141,7 @@
     <!-- Eligible -->
     <div *ngIf="resultMessage === 'eligible'" class="results-container eligible">
         <mat-icon aria-hidden="false" aria-label="Error" fontIcon="check_circle"></mat-icon>
-        <h2>Congratulations! You are Eligible.</h2>
+        <h2>Success, you are eligible.</h2>
         <p>Your business meets all the criteria for our loan scheme.</p>
         <button class="primary-btn" (click)="resetForm()">Apply Now</button>
     </div>
@@ -157,7 +156,7 @@
 
         <div class="results-actions">
             <button class="primary-btn" (click)="checkAlternativeOptions()">Check Alternative Options</button>
-            <button class="secondary-btn" (click)="resetForm()">Restart Eligibility Check</button>
+            <button class="secondary-btn" (click)="resetForm()">Apply Now</button>
         </div>
     </div>
 
@@ -166,7 +165,7 @@
 
         <div>
             <mat-icon aria-hidden="false" aria-label="Error" fontIcon="cancel"></mat-icon>
-            <h2>Not Eligible at This Time</h2>
+            <h2>Not eligible at this time</h2>
             <p>Based on your answers, your business doesn't currently qualify for our loan scheme.</p>
         </div>
 
