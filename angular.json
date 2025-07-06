@@ -44,7 +44,9 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "/eligibility_form/",
+              "deployUrl": "/eligibility_form/"
             },
             "development": {
               "optimization": false,
