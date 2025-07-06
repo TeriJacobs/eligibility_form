@@ -1,0 +1,180 @@
+<!-- Progress bar always visible -->
+<div class="progress-container">
+    <div class="progress-bar" [style.width.%]="calculateProgress()"></div>
+</div>
+
+<form (ngSubmit)="checkEligibility()" #form="ngForm">
+
+    <!-- Question 1 -->
+    <div *ngIf="stepIndex === 0" class="step-container">
+        <div class="step-content">
+
+            <h4>Is your business registered in the UK?</h4>
+
+            <label class="radio-option">
+                <input type="radio" [(ngModel)]="isUKRegistered" name="isUKRegistered" [value]="true" required>
+                <span>Yes, my business is registered in the UK</span>
+            </label>
+
+            <label class="radio-option">
+                <input type="radio" [(ngModel)]="isUKRegistered" name="isUKRegistered" [value]="false" required>
+                <span>No, my business is not registered in the UK</span>
+            </label>
+        </div>
+
+        <div class="step-actions">
+            <button type="button" class="primary-btn" (click)="continue()"
+                [disabled]="isUKRegistered === undefined">Continue</button>
+        </div>
+    </div>
+
+
+    <!-- Question 2 -->
+    <div *ngIf="stepIndex === 1">
+        <h4>Has your business been trading for at least 12 months?</h4>
+
+        <label class="radio-option">
+            <input type="radio" [(ngModel)]="tradingDuration" name="tradingDuration" [value]="true" required>
+            <span>Yes</span>
+        </label>
+        <label class="radio-option">
+            <input type="radio" [(ngModel)]="tradingDuration" name="tradingDuration" [value]="false" required>
+            <span>No</span>
+        </label>
+
+        <div class="actions">
+            <button type="button" class="secondary-btn btn" (click)="goBack()">Back</button>
+            <button type="button" class="primary-btn btn" (click)="continue()"
+                [disabled]="tradingDuration === undefined">Continue</button>
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div *ngIf="stepIndex === 2">
+        <h4>What is your annual turnover?</h4>
+
+        <label class="radio-option">
+            <input type="radio" [(ngModel)]="annualTurnover" name="annualTurnover" [value]="50000">
+            <span>Under £50,000</span>
+        </label>
+
+        <label class="radio-option">
+            <input type="radio" [(ngModel)]="annualTurnover" name="annualTurnover" [value]="100000">
+            <span>£51,000 - £100,000</span>
+        </label>
+
+        <label class="radio-option">
+            <input type="radio" [(ngModel)]="annualTurnover" name="annualTurnover" [value]="500000">
+            <span>£101,000 - £500,000</span>
+        </label>
+
+        <label class="radio-option">
+            <input type="radio" [(ngModel)]="annualTurnover" name="annualTurnover" [value]="500001">
+            <span>More than £500,000</span>
+        </label>
+
+        <div class="actions">
+            <button type="button" class="secondary-btn btn" (click)="goBack()">Back</button>
+            <button type="button" class="primary-btn btn" (click)="continue()"
+                [disabled]="!annualTurnover">Continue</button>
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div *ngIf="stepIndex === 3">
+        <h4>Have you previously received government-backed funding?</h4>
+
+        <label class="radio-option">
+            <input type="radio" [(ngModel)]="receivedFunding" name="receivedFunding" [value]="true" required>
+            <span>Yes, I have received government funding</span>
+        </label>
+        <label class="radio-option">
+            <input type="radio" [(ngModel)]="receivedFunding" name="receivedFunding" [value]="false" required>
+            <span>No, I have not received government funding</span>
+        </label>
+
+        <div class="actions">
+            <button type="button" class="secondary-btn btn" (click)="goBack()">Back</button>
+            <button type="button" class="primary-btn btn" (click)="continue()"
+                [disabled]="receivedFunding === undefined">Continue</button>
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div *ngIf="stepIndex === 4 && !showResults && !isLoading">
+        <h4>What loan amount are you seeking?</h4>
+
+        <!-- Input field styled like a radio card -->
+        <div style="display: flex; justify-content: center; margin-top: 1rem;">
+            <div style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <span class="currency-symbol">£</span>
+                <div class="radio-option amount-card">
+                    <input id="loanAmountInput" type="number" name="loanAmountInput" [(ngModel)]="loanAmount"
+                        [min]="25000" [max]="250000" step="1000"
+                        style="border: none; outline: none; width: 120px; font-size: 1rem;" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Slider bound to the same model -->
+        <input type="range" name="loanAmountSlider" [(ngModel)]="loanAmount" min="25000" max="250000" step="1000" />
+
+        <!-- Live preview of selected amount -->
+        <p>Selected: <strong>£{{ loanAmount?.toLocaleString() }}</strong></p>
+
+        <div class="actions">
+            <button type="button" class="secondary-btn btn" (click)="goBack()">Back</button>
+            <button type="submit" class="primary-btn btn" [disabled]="!loanAmount">Check Eligibility</button>
+        </div>
+    </div>
+</form>
+
+<!-- loading spinner -->
+<div *ngIf="isLoading" class="loading-container">
+    <mat-progress-spinner mode="indeterminate" diameter="48" color="#000">
+    </mat-progress-spinner>
+    <p>Checking your eligibility...</p>
+</div>
+
+<!-- Result -->
+<div *ngIf="showResults">
+
+    <!-- Eligible -->
+    <div *ngIf="resultMessage === 'eligible'" class="results-container eligible">
+        <mat-icon aria-hidden="false" aria-label="Error" fontIcon="check_circle"></mat-icon>
+        <h2>Congratulations! You are Eligible.</h2>
+        <p>Your business meets all the criteria for our loan scheme.</p>
+        <button class="primary-btn" (click)="resetForm()">Apply Now</button>
+    </div>
+
+    <!-- Possibly Eligible -->
+    <div *ngIf="resultMessage === 'possiblyEligible'" class="results-container possibly-eligible">
+        <div>
+            <mat-icon aria-hidden="false" aria-label="Error" fontIcon="cancel"></mat-icon>
+            <h2>Possibly Eligible</h2>
+            <p>Your business might qualify, but the loan amount requested is at the scheme's upper limit.</p>
+        </div>
+
+        <div class="results-actions">
+            <button class="primary-btn" (click)="checkAlternativeOptions()">Check Alternative Options</button>
+            <button class="secondary-btn" (click)="resetForm()">Restart Eligibility Check</button>
+        </div>
+    </div>
+
+    <!-- Not Eligible -->
+    <div *ngIf="resultMessage === 'notEligible'" class="results-container not-eligible">
+
+        <div>
+            <mat-icon aria-hidden="false" aria-label="Error" fontIcon="cancel"></mat-icon>
+            <h2>Not Eligible at This Time</h2>
+            <p>Based on your answers, your business doesn't currently qualify for our loan scheme.</p>
+        </div>
+
+        <div class="results-actions">
+            <button class="primary-btn" (click)="checkAlternativeOptions()">Check Alternative Options</button>
+            <button class="secondary-btn" (click)="resetForm()">Restart Eligibility Check</button>
+        </div>
+
+    </div>
+
+</div>
