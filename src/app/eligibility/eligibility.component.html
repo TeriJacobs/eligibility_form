@@ -21,10 +21,12 @@
             </label>
         </div>
 
-        <div class="step-actions">
-            <button type="button" class="primary-btn" (click)="continue()"
+        <div class="actions">
+            <button type="button" class="secondary-btn btn invisible-btn" disabled>Back</button>
+            <button type="button" class="primary-btn btn" (click)="continue()"
                 [disabled]="isUKRegistered === undefined">Continue</button>
         </div>
+
     </div>
 
 
@@ -165,7 +167,7 @@
 
         <div>
             <mat-icon aria-hidden="false" aria-label="Error" fontIcon="cancel"></mat-icon>
-            <h2>Not eligible at this time</h2>
+            <h2>Not eligible at this time.</h2>
             <p>Based on your answers, your business doesn't currently qualify for our loan scheme.</p>
         </div>
 
